@@ -1,0 +1,13 @@
+Maze,Mode,Intuition,Time Steps in First Run,Path Length in First Run,Time Steps in Second Run,Path Length in Second Run,Coverage,Score,Computation Time,Maze Size,Number of Grid Visited Per Time Step of First Run,Number of Grid Visited Per Path Length of First Run
+1,complete,False,200.8,245.0,17.0,32.0,1.0,24.26,92.07,144.0,0.72,0.59
+1,complete,True,200.9,244.6,17.0,32.0,1.0,24.26,44.49,144.0,0.72,0.59
+1,incomplete,False,117.15,141.5,18.05,32.2,0.61,22.56,41.78,144.0,0.75,0.62
+1,incomplete,True,158.75,193.1,17.65,32.1,0.8,23.53,32.74,144.0,0.73,0.61
+2,complete,False,273.3,332.9,22.0,43.0,1.0,31.84,171.39,196.0,0.72,0.59
+2,complete,True,280.35,343.9,22.0,43.0,1.0,32.08,82.38,196.0,0.7,0.57
+2,incomplete,False,195.9,241.7,22.6,43.1,0.73,29.88,95.89,196.0,0.73,0.59
+2,incomplete,True,188.95,232.3,23.5,43.3,0.7,30.58,47.96,196.0,0.73,0.59
+3,complete,False,353.95,443.0,25.0,49.0,1.0,37.63,286.99,256.0,0.72,0.58
+3,complete,True,359.35,450.4,25.0,49.0,1.0,37.81,134.39,256.0,0.71,0.57
+3,incomplete,False,237.45,299.0,25.95,50.3,0.67,34.73,161.28,256.0,0.73,0.58
+3,incomplete,True,202.8,253.4,26.0,50.4,0.59,33.63,62.07,256.0,0.75,0.6

@@ -49,7 +49,7 @@ Equipped with such algorithms, the micromouse shows extremely potent ability in 
   - the 4s register the bottom side, and 
   - the 8s register the left side. 
 
-For example, the number 10 means that a square is open on the left and right, with walls on top and bottom (0*1 + 1*2 + 0*4 + 1*8 = 10). 
+For example, the number 10 means that a square is open on the left and right, with walls on top and bottom (0 * 1 + 1 * 2 + 0 * 4 + 1 * 8 = 10). 
 Note that, due to array indexing, the first data row in the text file corresponds with the leftmost column in the maze, its first element being the starting square (bottom-left) corner of the maze.
 
 ## Micromouse Specifications

@@ -7,7 +7,7 @@ Date: 3/2/2017
 [Micromouse](https://en.wikipedia.org/wiki/Micromouse) is a contest where small robot mice (micromouse) solve a maze. It is very popular in US, UK and Japan among the young juniors who are interested in designing robots and programming artificial intelligence. In Micromouse contest, the players are going to test their micromouse to solve the maze. 
 The project goal is to design a micromouse that could explore and find destination efficiently in the virtual maze.
 A maze solver algorithm and a maze explorer algorithm were developed for micromouse using real-time dynamic programming. 
-Equipped with such algorithms, the micromouse shows extremely potent ability in maze exploration optimal route planning¡£
+Equipped with such algorithms, the micromouse shows extremely potent ability in maze exploration optimal route planning.
 
 ## Maze Specifications
 

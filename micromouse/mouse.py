@@ -18,7 +18,7 @@ from observer import destination_expectation
 
 
 class Mouse(object):
-    def __init__(self, memory_size = 100, movements = [0,1,2,3], heuristic = True):
+    def __init__(self, memory_size = 100, movements = [0,1,2,3], heuristic = True, intuition = True):
         # Initialize Mouse object
         self.maze_learned = Maze_Learned(size_max = memory_size)
         self.maze_visited = np.zeros((memory_size, memory_size), dtype = np.int32)
@@ -45,6 +45,8 @@ class Mouse(object):
         self.heuristic = heuristic
         # Percentage of visited maze
         self.percentage_visited = 0
+        # Use intuition
+        self.intuition = intuition
 
     def obstacle_sensor(self, maze, location_real, orientation_real):
         '''
@@ -123,9 +125,32 @@ class Mouse(object):
                     if self.maze_visited[x][y] == 0:
                         destination_candidates.append([x,y])
 
-        # If the mouse has been any corner of the maze and there is no destination candidate left, the mouse choose starting point as its next destination.
+        # If the mouse has been any corner of the maze and there is no destination candidate left, the mouse choose its current location as its next destination.
         if len(destination_candidates) == 0:
-            destination_candidates.append(self.starting)
+            destination_candidates.append(self.location_defined)
+
+        # If among the destination candidates, there is any destination candidates that are the neighbors of the micromouse's current location, randomly pick one of such destination candidates and remove other destination candidates.
+        if self.intuition == True:
+            destination_candidates_intuition = list()
+            for destination_candidate in destination_candidates:
+                manhattan_distance = np.sum(np.absolute(np.array(destination_candidate) - np.array(self.location_defined)))
+                if manhattan_distance == 1:
+                    # up
+                    if ((destination_candidate[1] - self.location_defined[1]) == 1) and (self.maze_learned.is_permissible(cell = self.location_defined, direction = 'up')):
+                        destination_candidates_intuition.append(destination_candidate)
+                    # down
+                    elif ((destination_candidate[1] - self.location_defined[1]) == -1) and (self.maze_learned.is_permissible(cell = self.location_defined, direction = 'down')):
+                        destination_candidates_intuition.append(destination_candidate)
+                    # left
+                    elif ((destination_candidate[0] - self.location_defined[0]) == -1) and (self.maze_learned.is_permissible(cell = self.location_defined, direction = 'left')):
+                        destination_candidates_intuition.append(destination_candidate)
+                    # right
+                    elif ((destination_candidate[0] - self.location_defined[0]) == 1) and (self.maze_learned.is_permissible(cell = self.location_defined, direction = 'right')):
+                        destination_candidates_intuition.append(destination_candidate)
+
+            if len(destination_candidates_intuition) > 0:
+                destination_candidates = random.sample(destination_candidates_intuition,1)
+            #print(destination_candidates)
 
         '''
         Heuristic destnation selection
@@ -254,7 +279,7 @@ class Mouse(object):
 if __name__ == '__main__':
 
     testmaze = Maze(str(sys.argv[1]))
-    testmouse = Mouse(memory_size = 40, movements = [0,1,2,3], heuristic = True)
+    testmouse = Mouse(memory_size = 40, movements = [0,1,2,3], heuristic = True, intuition = True)
     # Initialize the micromouse
     starting = [0,0]
     destination_final = testmaze.destinations

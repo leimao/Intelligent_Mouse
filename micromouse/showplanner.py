@@ -35,6 +35,8 @@ if __name__ == '__main__':
     # Control the speed of turtle: [0:10]
     # 'fastest': 0; 'fast': 10, 'normal': 6, 'slow': 3, 'slowest': 1 
     wally.speed(0)
+    # Control the width of turtle
+    wally.width(3)
     # Control the shape of turtle
     wally.shape('arrow')
     wally.hideturtle()

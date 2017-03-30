@@ -1,7 +1,0 @@
-Maze,Mode,Time Steps in First Run,Path Length in First Run,Time Steps in Second Run,Path Length in Second Run,Coverage,Score,Maze Size,Number of Grid Visited Per Time Step of First Run,Number of Grid Visited Per Path Length of First Run
-1,complete,8.29,15.97,0.0,0.0,0.0,0.28,0.0,0.03,0.04
-1,incomplete,49.79,61.42,1.04,1.49,0.24,1.5,0.0,0.03,0.04
-2,complete,10.39,17.25,0.0,0.0,0.0,0.35,0.0,0.03,0.03
-2,incomplete,49.42,60.03,2.47,1.63,0.19,1.81,0.0,0.04,0.04
-3,complete,16.15,29.81,0.0,0.0,0.0,0.54,0.0,0.03,0.04
-3,incomplete,75.16,92.34,1.28,2.04,0.23,1.72,0.0,0.04,0.05

@@ -3,15 +3,14 @@ Micromouse Maze Solver
 Author: Lei Mao
 Website: https://github.com/leimao/
 Date: 2017/2/16
-Content: Visualize micromouse solving maze using Python turtle library.
-Notes: This script is modified from the original showmaze.py in Udacity Machine Learning Nanodegree Capstone Project and is able to show the actions of micromouse.
+Content: Simulate micromouse in the maze.
 '''
 
 import numpy as np
-import turtle
+import pandas as pd
 import random
 import sys
-import os
+import time
 from maze import Maze
 from maze import Maze_Learned
 from planner import best_path
@@ -21,16 +20,15 @@ from observer import orientation_observed
 from observer import coordinate_observed
 from observer import destination_expectation
 
-if __name__ == '__main__':
-    '''
-    This function uses Python's turtle library to present the animation of micromouse solving the maze given as an argument when running the script.
-    '''
-    testmaze = Maze(str(sys.argv[1]))
-    testmouse = Mouse(memory_size = 40, movements = [0,1,2,3], heuristic = True, intuition = True)
 
+def mouse_test(maze, mouse, mode):
+    
     # Check arguments
-    if (str(sys.argv[2]) != 'complete') and (str(sys.argv[2]) != 'incomplete'):
+    if (mode != 'complete') and (mode != 'incomplete'):
         raise Exception('Argument Error!')
+
+    testmaze = maze
+    testmouse = mouse
 
     # Initialize the micromouse
     starting = [0,0]
@@ -43,104 +41,6 @@ if __name__ == '__main__':
     # Set last location
     location_last = starting[:]
 
-    # Intialize the window and drawing turtle.
-    window = turtle.Screen()
-
-    # Press enter to start
-    # This is for recording purpose
-    raw_input("Press Enter to continue...")
-
-    wally = turtle.Turtle()
-
-    # Control the speed of turtle: [0:10]
-    # 'fastest': 0; 'fast': 10, 'normal': 6, 'slow': 3, 'slowest': 1 
-    wally.speed(0)
-    # Control the shape of turtle
-    wally.shape('arrow')
-    wally.hideturtle()
-    wally.penup()
-    # Control the screen refresher rate
-    wally.tracer(0, 0)
-
-    # Maze centered on (0, 0), squares are 30 units in length.
-    sq_size = 30
-    label_size = 20
-    origin_x = testmaze.dim_x * sq_size / -2
-    origin_y = testmaze.dim_y * sq_size / -2
-
-    # iterate through squares one by one to decide where to draw walls
-    for x in range(testmaze.dim_x):
-        for y in range(testmaze.dim_y):
-            if not testmaze.is_permissible([x,y], 'up'):
-                wally.goto(origin_x + sq_size * x, origin_y + sq_size * (y+1))
-                # Set turtle heading orientation
-                # 0 - east, 90 - north, 180 - west, 270 - south
-                wally.setheading(0)
-                wally.pendown()
-                wally.forward(sq_size)
-                wally.penup()
-
-            if not testmaze.is_permissible([x,y], 'right'):
-                wally.goto(origin_x + sq_size * (x+1), origin_y + sq_size * y)
-                wally.setheading(90)
-                wally.pendown()
-                wally.forward(sq_size)
-                wally.penup()
-
-            # Only check bottom wall if on lowest row
-            if y == 0 and not testmaze.is_permissible([x,y], 'down'):
-                wally.goto(origin_x + sq_size * x, origin_y)
-                wally.setheading(0)
-                wally.pendown()
-                wally.forward(sq_size)
-                wally.penup()
-
-            # Only check left wall if on leftmost column
-            if x == 0 and not testmaze.is_permissible([x,y], 'left'):
-                wally.goto(origin_x, origin_y + sq_size * y)
-                wally.setheading(90)
-                wally.pendown()
-                wally.forward(sq_size)
-                wally.penup()
-
-    # Show the destinations with red color
-    for destination in testmaze.destinations:
-        wally.goto(origin_x + sq_size * destination[0] + (sq_size - label_size) / 2, origin_y + sq_size * destination[1] + (sq_size - label_size) / 2)
-        wally.color('','red')
-        wally.begin_fill()
-        wally.setheading(0)
-        wally.forward(label_size)
-        wally.setheading(90)
-        wally.forward(label_size)
-        wally.setheading(180)
-        wally.forward(label_size)
-        wally.setheading(270)
-        wally.forward(label_size)
-        wally.end_fill()
-
-    # Show the start with green color
-    wally.goto(origin_x + sq_size * starting[0] + (sq_size - label_size) / 2, origin_y + sq_size * starting[1] + (sq_size - label_size) / 2)
-    wally.color('','green')
-    wally.begin_fill()
-    wally.setheading(0)
-    wally.forward(label_size)
-    wally.setheading(90)
-    wally.forward(label_size)
-    wally.setheading(180)
-    wally.forward(label_size)
-    wally.setheading(270)
-    wally.forward(label_size)
-    wally.end_fill()
-
-    # Plot micromouse path
-    # Initialize micromouse
-    wally.goto(origin_x + sq_size * starting[0] + sq_size / 2, origin_y + sq_size * starting[1] + sq_size / 2)
-    wally.color('orange')
-    wally.setheading(90)
-    wally.tracer(1, 200)
-    wally.showturtle()
-    wally.pendown()
-
     # Stage 1: Mouse exploration
 
     # Statistics
@@ -148,19 +48,21 @@ if __name__ == '__main__':
     length_movement_1 = 0
     num_actions_2 = 0
     length_movement_2 = 0
+    num_actions_3 = 0
+    length_movement_3 = 0
+    exploration_time = 0
     maze_visited_observed = np.zeros((testmaze.dim_x, testmaze.dim_y), dtype = np.int32)
     maze_visited_observed[tuple(starting)] = 1
     percentage_maze_visited_observed = float(np.sum(maze_visited_observed))/(maze_visited_observed.shape[0] * maze_visited_observed.shape[1])
 
     # Explore the maze
-    #while (testmouse.percentage_visited < 0.99): # Return when mouse visited all the grids reachable
-    #while (testmouse.found_destination == False): # Return when mouse found destination
 
     # If argument 1 is 'incomplete', return when mouse found destination
     # If argument 2 is 'complete', return when mouse visited all the grids reachable
 
-    while ((testmouse.percentage_visited < 1.0) if (str(sys.argv[2]) == 'complete') else (testmouse.found_destination == False)):
-        print(testmouse.percentage_visited)
+    exploration_start = time.time()
+
+    while ((testmouse.percentage_visited < 1.0) if (mode == 'complete') else (testmouse.found_destination == False)):
 
         # Action parameters of mouse
         destination_best, direction_list, movement_list, path_list = testmouse.mouse_action(maze = testmaze, location_real = location_real, orientation_real = orientation_real)
@@ -204,19 +106,13 @@ if __name__ == '__main__':
         # Update location_last
         location_last = location_real
 
-        print('location_real',location_real)
-
-        print('total num_actions',num_actions_1)
-
-        print('length_movement',length_movement_1)
-
-        print('coverage',percentage_maze_visited_observed)
-        
-        # Plot path
-        direction_dict = {'up': 90, 'down': 270, 'left': 180, 'right': 0}
-        for direction, movement in zip(direction_list_observed, movement_list_observed):
-            wally.setheading(direction_dict[direction])
-            wally.forward(movement * sq_size)
+        #print('location_real',location_real)
+        #print('total num_actions',num_actions_1)
+        #print('length_movement',length_movement_1)
+        #print('coverage',percentage_maze_visited_observed)
+    
+    exploration_end = time.time()
+    exploration_time = exploration_end - exploration_start
 
 
     # Stage 2: Mouse goes back to starting point
@@ -247,21 +143,13 @@ if __name__ == '__main__':
     
     # Update location_last
     location_last = location_real
-    
-    # Count number of actions
-    num_actions_1 += (len(path_list) - 1)
-    
-    # Count the length of movements
-    length_movement_1 += length_count(path_list = path_list)
-    
-    # Plot path
-    wally.color('purple')
-    direction_dict = {'up': 90, 'down': 270, 'left': 180, 'right': 0}
-    for direction, movement in zip(direction_list_observed, movement_list_observed):
-        wally.setheading(direction_dict[direction])
-        wally.forward(movement * sq_size)
-    
 
+    # Count number of actions
+    num_actions_2 += (len(path_list) - 1)
+
+    # Count the length of movements
+    length_movement_2 += length_count(path_list = path_list)
+    
     # Stage 3: Mouse goes to the destination again
 
     direction_list, movement_list, path_list = testmouse.go_destinations()
@@ -291,30 +179,50 @@ if __name__ == '__main__':
     location_last = location_real  
     
     # Count number of actions
-    num_actions_2 += (len(path_list) - 1)
+    num_actions_3 += (len(path_list) - 1)
 
     # Count the length of movements
-    length_movement_2 += length_count(path_list = path_list)
+    length_movement_3 += length_count(path_list = path_list)
 
-    print('total num_actions',num_actions_2)
+    #print('total num_actions',num_actions_2)
+    #print('length_movement',length_movement_2)
+    #print('Final score', num_actions_2 + 1./30 * num_actions_1)
 
-    print('length_movement',length_movement_2)
-        
-    # Plot path
-    wally.color('blue')
-    direction_dict = {'up': 90, 'down': 270, 'left': 180, 'right': 0}
-    for direction, movement in zip(direction_list_observed, movement_list_observed):
-        wally.setheading(direction_dict[direction])
-        wally.forward(movement * sq_size)
+    score = num_actions_3 + 1./30 * ((num_actions_1 + num_actions_2) + num_actions_3)
 
-    print('Final score', num_actions_2 + 1./30 * (num_actions_1 + num_actions_2))
+    return (num_actions_1, length_movement_1, num_actions_2, length_movement_2, num_actions_3, length_movement_3, percentage_maze_visited_observed, score, exploration_time)
 
-    # Save screen
-    result_directory = 'result/'
-    if not os.path.exists('result/'):
-        os.makedirs('result/')
 
-    file_name = str(sys.argv[1]).split('.')[0] + '_contest_route_' + str(sys.argv[2]) + '.eps'
-    ps = window.getcanvas().postscript(file = result_directory + file_name)
 
-    window.exitonclick()
+if __name__ == '__main__':
+    '''
+    Simulate the mouse in the maze multiple times and record the simulation results.
+    '''
+
+    # Create Pandas DataFrame to record simulation results
+    column_names = ['maze', 'mode', 'intuition', 'heuristic', 'num_actions_1', 'length_movement_1', 'num_actions_2', 'length_movement_2', 'num_actions_3', 'length_movement_3', 'true_coverage', 'score', 'exploration_time', 'computation_time']
+    df = pd.DataFrame(columns = column_names)
+
+    num_tests = 10
+    modes = ['complete', 'incomplete']
+    intuitions = [False, True]
+    heuristics = [False, True]
+
+    for mode in modes:
+        for intuition in intuitions:
+            for heuristic in heuristics:
+                for i in xrange(num_tests):
+                    print('Simulation: %d. Mode: %s. Intuition: %s. Heuristic: %s.' %(i, mode, intuition, heuristic))
+                    testmaze = Maze(str(sys.argv[1]))
+                    testmouse = Mouse(memory_size = 40, movements = [0,1,2,3], heuristic = heuristic, intuition = intuition)
+                    time_start = time.time()
+                    result = mouse_test(maze = testmaze, mouse = testmouse, mode = mode)
+                    time_end = time.time()
+                    computation_time = time_end - time_start
+                    df = df.append({column_names[0]: (str(sys.argv[1]).split('.')[0]).split('_')[-1], column_names[1]:mode, column_names[2]:intuition, column_names[3]:heuristic, column_names[4]:result[0], column_names[5]:result[1], column_names[6]:result[2], column_names[7]:result[3], column_names[8]:result[4], column_names[9]:result[5], column_names[10]:result[6], column_names[11]:result[7], column_names[12]:result[8], column_names[13]:computation_time}, ignore_index=True)
+                    # Print result
+                    print('The final score is %f.' %result[7])
+                    # Print computation time
+                    print('The computation time is %f.' %computation_time)
+                    # Save Pandas DataFrame to csv after each simulation
+                    df.to_csv('test_result_maze_' + (str(sys.argv[1]).split('.')[0]).split('_')[-1] + '.csv', sep=',',  index=False)

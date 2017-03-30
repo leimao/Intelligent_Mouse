@@ -2,11 +2,12 @@
 Author: Lei Mao
 Date: 3/2/2017
 
-## Project Description
+## Introduction
 
-Micromouse project is one of the capstone project suggestions in Udacity's Machine Learning Engineer nanodegree program.
 [Micromouse](https://en.wikipedia.org/wiki/Micromouse) is a contest where small robot mice (micromouse) solve a maze. It is very popular in US, UK and Japan among the young juniors who are interested in designing robots and programming artificial intelligence. In Micromouse contest, the players are going to test their micromouse to solve the maze. 
 The project goal is to design a micromouse that could explore and find destination efficiently in the virtual maze.
+A maze solver algorithm and a maze explorer algorithm were developed for micromouse using real-time dynamic programming. 
+Equipped with such algorithms, the micromouse shows extremely potent ability in maze exploration optimal route planning¡£
 
 ## Maze Specifications
 
@@ -67,6 +68,7 @@ Note that, due to array indexing, the first data row in the text file correspond
 - The micromouse has two strategies when it reached the destination in the first run. 
 - Strategy I: Return to the start square and proceed to the second run. This is called "incomplete" mode in the micromouse specifications.
 - Strategy II: Keep exploring until it has learned all the information in the maze followed by returning to the start square. This is called "complete" mode in the micromouse specifications.
+- The micromouse can also use "intuition" and "heuristics" to accelarte computing.
 
 ## Scoring
 
@@ -76,11 +78,6 @@ Note that, due to array indexing, the first data row in the text file correspond
 
 
 ## Source codes
-
-- There are two versions of the micromouse: "intelligent" mouse under the directory of "intelligent_version" and "intuition" mouse under the directory of "intuition_version".
-- The simulation results of the two versions of micromouse are almost the same. 
-- "intelligent" mouse do all the calculations throughout the game, therefore is computationally slower.
-- "intelligent" mouse uses some intuitions and avoids some "unnecessary" calculations, therefore is computationally faster.
 
 Codes for the project includes the following files:
 - maze.py   

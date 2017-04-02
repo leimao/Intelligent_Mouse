@@ -188,7 +188,7 @@ def mouse_test(maze, mouse, mode):
     #print('length_movement',length_movement_2)
     #print('Final score', num_actions_2 + 1./30 * num_actions_1)
 
-    score = num_actions_3 + 1./30 * ((num_actions_1 + num_actions_2) + num_actions_3)
+    score = num_actions_3 + 1./30 * (num_actions_1 + num_actions_2)
 
     return (num_actions_1, length_movement_1, num_actions_2, length_movement_2, num_actions_3, length_movement_3, percentage_maze_visited_observed, score, exploration_time)
 

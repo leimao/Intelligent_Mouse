@@ -7,7 +7,7 @@ Date: 3/2/2017
 [Micromouse](https://en.wikipedia.org/wiki/Micromouse) is a contest where small robot mice (micromouse) solve a maze. It is very popular in US, UK and Japan among the young juniors who are interested in designing robots and programming artificial intelligence. In Micromouse contest, the players are going to test their micromouse to solve the maze. 
 The project goal is to design a micromouse that could explore and find destination efficiently in the virtual maze.
 A maze solver algorithm and a maze explorer algorithm were developed for micromouse using real-time dynamic programming. 
-Equipped with such algorithms, the micromouse shows extremely potent ability in maze exploration optimal route planning.
+Equipped with such algorithms, the micromouse shows extremely potent ability in maze exploration optimal route planning¡£
 
 ## Maze Specifications
 
@@ -25,21 +25,21 @@ Equipped with such algorithms, the micromouse shows extremely potent ability in 
 ### An example maze
 ---
 
-  12,12  
-  5,5,6,6  
-  5,6,5,6  
-  1,5,7,5,5,5,7,5,7,5,5,6  
-  3,5,14,3,7,5,15,4,9,5,7,12  
-  11,6,10,10,9,7,13,6,3,5,13,4  
-  10,9,13,12,3,13,5,12,9,5,7,6  
-  9,5,6,3,15,5,5,7,7,4,10,10  
-  3,5,15,14,10,3,6,10,11,6,10,10  
-  9,7,12,11,12,9,14,9,14,11,13,14  
-  3,13,5,12,2,3,13,6,9,14,3,14  
-  11,4,1,7,15,13,7,13,6,9,14,10  
-  11,5,6,10,9,7,13,5,15,7,14,8  
-  11,5,12,10,2,9,5,6,10,8,9,6  
-  9,5,5,13,13,5,5,12,9,5,5,12  
+  12,12
+  5,5,6,6
+  5,6,5,6
+  1,5,7,5,5,5,7,5,7,5,5,6
+  3,5,14,3,7,5,15,4,9,5,7,12
+  11,6,10,10,9,7,13,6,3,5,13,4
+  10,9,13,12,3,13,5,12,9,5,7,6
+  9,5,6,3,15,5,5,7,7,4,10,10
+  3,5,15,14,10,3,6,10,11,6,10,10
+  9,7,12,11,12,9,14,9,14,11,13,14
+  3,13,5,12,2,3,13,6,9,14,3,14
+  11,4,1,7,15,13,7,13,6,9,14,10
+  11,5,6,10,9,7,13,5,15,7,14,8
+  11,5,12,10,2,9,5,6,10,8,9,6
+  9,5,5,13,13,5,5,12,9,5,5,12
 
 ---
 
@@ -49,7 +49,7 @@ Equipped with such algorithms, the micromouse shows extremely potent ability in 
   - the 4s register the bottom side, and 
   - the 8s register the left side. 
 
-For example, the number 10 means that a square is open on the left and right, with walls on top and bottom (0 * 1 + 1 * 2 + 0 * 4 + 1 * 8 = 10). 
+For example, the number 10 means that a square is open on the left and right, with walls on top and bottom (0*1 + 1*2 + 0*4 + 1*8 = 10). 
 Note that, due to array indexing, the first data row in the text file corresponds with the leftmost column in the maze, its first element being the starting square (bottom-left) corner of the maze.
 
 ## Micromouse Specifications
